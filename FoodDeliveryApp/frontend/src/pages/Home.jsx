@@ -31,6 +31,12 @@ const Home = () => {
              POPULAR DISES
             </p>
             <h1 className="text-black font-bold text-5xl flex justify-center mt-[0.7rem]">Trending Now</h1>
+            <div className="flex gap-8 mt-20">
+              <img src={assets.burger} alt="" />
+              <img src={assets.momo} alt="" />
+              <img src={assets.piza} alt="" />
+              <img src={assets.pesty} alt="" />
+            </div>
           </div>
         </div>
       </div>
