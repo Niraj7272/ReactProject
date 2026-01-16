@@ -38,6 +38,13 @@ const Home = () => {
               <img src={assets.pesty} alt="" />
             </div>
           </div>
+          <div className="">
+            <img src={assets.food1} alt="" className="w-full pr-2 h-[40rem] absolute"/>
+          </div>
+          <div className="relative">
+            <h1 className="text-white font-bold text-5xl flex justify-center mt-[5rem]">ABOUT US</h1>
+            <p className="text-white ml-50 mr-50 font-semibold mt-20 text-2xl">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, facilis laboriosam saepe ab adipisci dolore natus corrupti omnis reprehenderit voluptas a! Illo inventore aspernatur aliquid quis distinctio odio sapiente voluptas?</p>
+          </div>
         </div>
       </div>
     </div>
