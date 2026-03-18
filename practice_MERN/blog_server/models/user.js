@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema({
     enum: ["male", "female"],
     default: "male",
   },
+  password:{
+    type: String,
+    required: true,
+
+  }
 });
 
 module.exports = mongoose.model("mbs_users", userSchema);
