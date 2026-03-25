@@ -6,6 +6,7 @@ const multer = require("multer");
 const router = express.Router();
 
 const user = require("../models/user");
+const Token = require("../models/token")
 
 const SECRET_KEY = "niraj"
 
@@ -51,20 +52,58 @@ router.post("/userlogin", async (req, res) => {
   try {
     const login = await user.findOne({user_email:email})
     if(!login){
-      return res.json({'msg':'Email not found'})
+      return res.json({"sts":1,'msg':'Email not found'})
     }else{
       if(await bcrypt.compare(password,login.password)){
         const token = jwt.sign({userid:login._id},SECRET_KEY,{expiresIn:'1hr'})
+        const expiresAt = new Date(Date.now()+(60*60*1000))
+        const tokenSave = new Token({
+          userId:login._id,
+          token,
+          expiresAt
+        })
+        const uname = login.user_name
+        await tokenSave.save()
 
-        return res.json({"msg":"login success",token})
+        return res.json({"sts":0,"msg":"login success","user_name":uname,token})
       }else{
-        return res.json({"msg": "password is wrong"})
+        return res.json({"sts":2,"msg": "password is wrong"})
       }
     }
   } catch (error) {
     res.json(error)
   }
 });
+
+//http://localhost:5000/api/user/checktoken
+router.post('/checktoken',async(req,res)=>{
+  const token = req.body.token
+  try {
+    const tokenchk = await Token.findOne({token})
+    if(!tokenchk){
+      return res.json({'tokensts':1})
+    }else{
+      return res.json({'tokensts':0})
+    }
+  } catch (error) {
+    console.error(error);
+  }
+})
+
+//http://localhost:5000/api/user/logout
+router.post('/logout',async(req,res)=>{
+  const token = req.body.token
+  try {
+    const logout = await Token.findOneAndDelete({token})
+    if(!logout){
+      return res.json({'logout_sts':1})
+    }else{
+      return res.json({'logout_sts':0})
+    }
+  } catch (error) {
+    console.error(error)
+  }
+})
 
 //http://localhost:5000/api/user/viewuser
 router.get("/viewuser", async (req, res) => {
