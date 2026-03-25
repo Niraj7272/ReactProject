@@ -1,7 +1,12 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+
+  const navigate = useNavigate();
+
+  const [msg, setMsg] = useState(null);
 
   const [logindt,setLogindt] = useState({
     user_email:'',
@@ -21,6 +26,16 @@ const Login = () => {
             try {
                 const res = await axios.post('http://localhost:5000/api/user/userlogin',logindt)
                 console.log(res);
+                if(res.data.sts===0){
+                  localStorage.setItem('token',res.data.token)
+                  localStorage.setItem('uname',res.data.user_name)
+                  // setMsg(res.data.msg)
+                  navigate('/home');
+                }else if (res.data.sts===1){
+                  setMsg(res.data.msg)
+                }else{
+                  setMsg(res.data.msg)
+                }
             } catch (error) {
                 console.error(error);
             }
@@ -44,6 +59,11 @@ const Login = () => {
             <tr>
                 <td colSpan={2}>
                     <button onClick={handleSubmit}>Login</button>
+                </td>
+            </tr>
+             <tr>
+                <td colSpan={2} align='center' style={{color:'red'}}>
+                    {msg}
                 </td>
             </tr>
             <tr>
